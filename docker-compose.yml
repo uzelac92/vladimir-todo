@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:latest
+    image: postgres:17
     container_name: vt_pg
     restart: unless-stopped
     environment:
@@ -11,12 +11,22 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vladimir_todo_app
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
+      # IMPORTANT: use the service name "db" as the host, not localhost
       DATABASE_URL: postgresql://app:pass@db:5432/app?schema=public
       PORT: 3000
       NODE_ENV: development
