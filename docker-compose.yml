@@ -12,5 +12,16 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://app:pass@db:5432/app?schema=public
+      PORT: 3000
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+
 volumes:
   pgdata:
