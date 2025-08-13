@@ -13,7 +13,7 @@ COPY . .
 RUN npx prisma generate
 
 # 4) Expose app port (EB will map its own port to this)
-EXPOSE 3000
+EXPOSE 8080
 
 # 5) At container start, apply DB migrations safely, then start server
 CMD ["sh","-c","npx prisma migrate deploy && node src/server.js"]
