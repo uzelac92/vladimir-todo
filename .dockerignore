@@ -1,0 +1,8 @@
+node_modules
+.git
+.prisma
+coverage
+dist
+*.log
+.env
+prisma/migrations/*-shadow*
